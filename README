@@ -78,4 +78,8 @@ Si prefieres usar Docker para levantar el proyecto, asegúrate de tener Docker i
 2. Cada consumo de endpoint tiene autenticación Bearer Token, el cual se genera al iniciar sesión 
 3. Para poder iniciar sesion ingresa la siguiente información (En caso de importar manualmente la Base de Datos)
 - Correo: Admin@example.com
+<<<<<<< HEAD
 - Contraseña: Admin
+=======
+- Contraseña: Admin
+>>>>>>> 05cf0ce30f7529d648bcb452cbdb17fb40c3bb81
