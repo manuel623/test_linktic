@@ -1,0 +1,73 @@
+# Proyecto Sistema Reservas
+
+Este proyecto está dividido en dos partes: **backend** y **frontend**. A continuación, se detallan los pasos para configurar y ejecutar ambos servicios correctamente.
+
+## Requisitos Previos
+
+### Backend
+- **.NET 8** instalado en tu máquina.
+- Tener una base de datos local en funcionamiento (MySQL Workbench).
+- Asegúrate de que la cadena de conexión en `appsettings.json` esté configurada correctamente.
+
+### Frontend
+- **Angular 17** instalado.
+- **Node.js** en versión 16.20.2 o superior.
+
+### Ejecución del proyecto
+- Accede a la aplicación a través de http://localhost:4200 para el frontend y http://localhost:5054 para el backend
+---
+
+## Instrucciones para la Base de Datos
+
+Es fundamental que la base de datos esté corriendo en tu entorno local antes de levantar el backend.
+Preferiblemente en tu puerto 3307
+
+1. **Crea la base de datos** en tu gestor de bases de datos (MySQL Workbench) con el nombre `sistema_reservas`.
+2. **Importa el archivo de la base de datos**:
+   - Localiza el archivo `sistema_reservas.sql` en la raíz del proyecto.
+   - Importa este archivo a tu base de datos.
+
+3. **Configura el archivo `appsettings.json` del backend**:
+   - Abre el archivo `appsettings.json` en la carpeta `sistema_reservas_backend` y asegúrate de que la configuración de la base de datos sea correcta. Debes incluir el nombre de la base de datos, el servidor, el usuario y la contraseña correctos.
+
+---
+
+## Instrucciones para el Backend
+
+1. Navega a la carpeta `sistema_reservas_backend`: cd sistema_reservas_backend
+2. Ejecuta el siguiente comando para la instalación de dependencias: `dotnet restore`
+    ## OPCIONAL 
+-- 3. Realiza migración a la Base de Datos: este paso es opcional en caso de no importar correctamente la Base de datos manualmente: `dotnet ef database update` --
+
+4. Construye la aplicación `dotnet build`
+5. Ejecuta la aplicación `dotnet run`
+
+-- Preferiblemente que se ejecute en el puerto 5054 -- 
+
+---
+
+### Instrucciones para el Frontend
+
+1. Navega a la carpeta `sistema_reservas_frontend`
+2. Ejecuta para instalar las dependencias: `npm install`
+3. Ejecuta para levantar el servidor: `npm start`
+
+---
+
+## Manejo de Errores
+
+El backend retornará un objeto JSON con la siguiente estructura en caso de cualquier solicitud
+
+{
+  "success": true,
+  "data": { /* datos del endpoint */ },
+  "message": "Descripción del error o éxito"
+}
+
+## Uso de Docker
+
+Si prefieres usar Docker para levantar el proyecto, asegúrate de tener Docker instalado en tu máquina
+
+1. Navega a la raíz del proyecto
+2. Construye y levanta los contenedores con Docker: `docker-compose up --build`
+

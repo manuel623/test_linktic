@@ -1,0 +1,41 @@
+<app-navbar></app-navbar>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Bienvenido, {{user_information.nombre}}</h1>
+            <p>Aquí puedes gestionar los usuarios, registrar cliente y servicios nuevos y reservar servicios a nuestros clientes.</p>
+        </div>
+    </div>
+</div>
+<div class="container my-4">
+    <div class="row text-center">
+        <div class="col-md-4">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <i class="fa-solid fa-spinner fa-spin fa-2xl mb-4" *ngIf="loading"></i>
+                    <h2 *ngIf="!loading">{{ dataClient.length }}</h2>
+                    <p>Clientes Registrados</p>
+                  </div>
+                  
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <i class="fa-solid fa-spinner fa-spin fa-2xl mb-4" *ngIf="loading"></i>
+                    <h2 *ngIf="!loading">{{ dataService.length }}</h2>
+                    <p>Servicios Creados</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <i class="fa-solid fa-spinner fa-spin fa-2xl mb-4" *ngIf="loading"></i>
+                    <h2 *ngIf="!loading">{{ dataReserva.length }}</h2>
+                    <p>Reservaciones Programadas</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

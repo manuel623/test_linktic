@@ -1,0 +1,123 @@
+<app-navbar></app-navbar>
+<div class="container my-4">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h3>Gestión de Reservas</h3>
+            <p>Crea y gestiona la administración de las reservas.</p>
+            <button *ngIf="!viewForm" class="btn btn-outline-primary mx-2" (click)="viewFormCreate()">
+                <i class="fa-solid fa-plus" style="color: #74C0FC; padding-right: 3px;"></i>Crear Reservación
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5" *ngIf="!viewForm">
+    <h3 class="text-center">Reservas</h3>
+    <div class="justify-content-center d-flex mt-5" *ngIf="loadingTable">
+        <i class="fa-solid fa-spinner fa-spin fa-2xl"></i>
+    </div>
+    <div class="container mt-4">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Buscar por cliente, servicio o estado..."
+                [(ngModel)]="searchText">
+            <span class="input-group-text"><i class="fa-solid fa-search"></i></span>
+        </div>
+        <table class="table table-striped text-center" *ngIf="!loadingTable">
+            <thead>
+                <tr>
+                    <th class="align-middle">Cliente</th>
+                    <th class="align-middle">Servicio</th>
+                    <th class="align-middle">Fecha de la Reservación</th>
+                    <th class="align-middle">Estado</th>
+                    <th class="align-middle">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngIf="filteredData().length <= 0">
+                    <td colspan="6" class="text-center">
+                        No hay datos para mostrar
+                    </td>
+                </tr>
+                <tr *ngFor="let item of filteredData()">
+                    <td class="align-middle">{{ item.clienteNombre }}</td>
+                    <td class="align-middle">{{ item.servicioNombre }}</td>
+                    <td class="align-middle">{{ item.fechaReserva | date:'HH:mm:ss dd \'de\' MMMM \'del\' yyyy ' }}</td>
+                    <td class="align-middle">
+                        <span class="text-status">{{ item.estado }}
+                            <i class="fa-solid fa-circle fa-2xs ms-2 mt-3"
+                                [ngClass]="item.estado === 'Activa' ? 'text-success' : 'text-danger'"></i>
+                        </span>
+                    </td>
+                    <td class="align-middle">
+                        <button class="btn btn-sm btn-outline-warning p-2 m-2" (click)="editViewUReser(item.id)">
+                            <i class="fa-solid fa-pen-to-square" style="color: #FFD43B; padding-right: 3px;"></i>Editar
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger p-2 m-2" (click)="deleteUser(item.id)">
+                            <i class="fa-solid fa-delete-left fa-flip-vertical"
+                                style="color: #ff1100; padding-right: 3px;"></i>Eliminar
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div *ngIf="viewForm" class="d-flex justify-content-center align-items-center">
+    <form [formGroup]="reservaForm" (ngSubmit)="submitForm()" class="p-4 border rounded bg-light w-100"
+        style="max-width: 90%; margin: 0 auto;">
+
+        <div class="mb-4">
+            <label for="cliente" class="form-label fs-4">Cliente</label>
+            <select formControlName="cliente" class="form-control form-control-lg">
+                <option *ngFor="let cliente of dataClient" [value]="cliente.id">{{ cliente.nombre }}</option>
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label for="servicio" class="form-label fs-4">Servicio</label>
+            <select formControlName="servicio" class="form-control form-control-lg">
+                <option *ngFor="let servicio of dataServicio" [value]="servicio.id">{{ servicio.nombre }}</option>
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label for="fecha" class="form-label fs-4">Fecha</label>
+            <input type="date" formControlName="fecha" class="form-control form-control-lg"
+                [ngClass]="{'is-invalid': reservaForm.get('fecha')?.invalid && (reservaForm.get('fecha')?.touched || reservaForm.get('fecha')?.dirty)}">
+            <div class="text-danger"
+                *ngIf="reservaForm.get('fecha')?.invalid && (reservaForm.get('fecha')?.touched || reservaForm.get('fecha')?.dirty)">
+                <div *ngIf="reservaForm.get('fecha')?.errors?.['required']">La fecha es requerida.</div>
+                <div *ngIf="reservaForm.get('fecha')?.errors?.['fechaPasada']">La fecha no puede ser anterior a la fecha
+                    actual.</div>
+            </div>
+        </div>
+
+
+        <div class="mb-4">
+            <label for="hora" class="form-label fs-4">Hora</label>
+            <input type="time" formControlName="hora" class="form-control form-control-lg"
+                [ngClass]="{'is-invalid': reservaForm.get('hora')?.invalid && (reservaForm.get('hora')?.touched || reservaForm.get('hora')?.dirty)}">
+            <div class="text-danger"
+                *ngIf="reservaForm.get('hora')?.invalid && (reservaForm.get('hora')?.touched || reservaForm.get('hora')?.dirty)">
+                <div *ngIf="reservaForm.get('hora')?.errors?.['required']">La hora es requerida.</div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label for="estado" class="form-label fs-4">Estado</label>
+            <select formControlName="estado" class="form-control form-control-lg">
+                <option value="Activa">Activa</option>
+                <option value="Cancelada">Cancelada</option>
+                <option value="Vencida">Vencida</option>
+            </select>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-secondary btn-lg" (click)="goBack()"
+                [disabled]="createUserButton">Volver</button>
+            <button type="submit" class="btn btn-primary btn-lg"
+                [disabled]="reservaForm.invalid || createUserButton">Guardar</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,92 @@
+<app-navbar></app-navbar>
+<div class="container my-4">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h3>Gestión de Servicios</h3>
+            <p>Crea y gestiona la administración de los servicios.</p>
+            <button *ngIf="!viewForm" class="btn btn-outline-primary mx-2" (click)="viewFormCreate()">
+                <i class="fa-solid fa-plus" style="color: #74C0FC; padding-right: 3px;"></i>Crear Servicio
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5" *ngIf="!viewForm">
+    <h3 class="text-center">Clientes</h3>
+    <div class="justify-content-center d-flex mt-5" *ngIf="loadingTable">
+        <i class="fa-solid fa-spinner fa-spin fa-2xl"></i>
+    </div>
+    <table class="table table-striped text-center" *ngIf="!loadingTable">
+        <thead>
+            <tr>
+                <th class="align-middle">Nombre</th>
+                <th class="align-middle">Descripción</th>
+                <th class="align-middle">Precio</th>
+                <th class="align-middle">Estado</th>
+                <th class="align-middle">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="dataService.length <= 0">
+                <td colspan="6" class="text-center">
+                    No hay datos para mostrar
+                </td>
+            </tr>
+            <tr *ngFor="let item of dataService">
+                <td class="align-middle">{{ item.nombre }}</td>
+                <td class="align-middle">{{ item.descripcion }}</td>
+                <td class="align-middle">{{ item.precio | currency:'COP ':'symbol':'1.0-0'}}</td>
+                <td class="align-middle">
+                    <span class="text-status">Activo<i class="fa-solid fa-circle fa-2xs ms-2 mt-3" style="color: #63E6BE;"></i></span>
+                </td>
+                <td class="align-middle">
+                    <button class="btn btn-sm btn-outline-warning p-2 m-2" (click)="editViewService(item.id)">
+                        <i class="fa-solid fa-pen-to-square" style="color: #FFD43B; padding-right: 3px;"></i>Editar
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger p-2 m-2" (click)="deleteUser(item.id)">
+                        <i class="fa-solid fa-delete-left fa-flip-vertical" style="color: #ff1100; padding-right: 3px;"></i>Eliminar
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="viewForm" class="d-flex justify-content-center align-items-center">
+    <form [formGroup]="serviceForm" (ngSubmit)="submitForm()" class="p-4 border rounded bg-light w-100" style="max-width: 90%; margin: 0 auto;">
+
+        <div class="mb-4">
+            <label for="nombre" class="form-label fs-4">Nombre</label>
+            <input type="text" class="form-control form-control-lg" formControlName="nombre" placeholder="Introduce tu nombre"
+                [ngClass]="{'is-invalid': serviceForm.get('nombre')?.invalid && (serviceForm.get('nombre')?.touched || serviceForm.get('nombre')?.dirty)}">
+            <div class="text-danger" *ngIf="serviceForm.get('nombre')?.errors && (serviceForm.get('nombre')?.touched || serviceForm.get('nombre')?.dirty)">
+                <div *ngIf="serviceForm.get('nombre')?.errors?.['required']">El nombre es requerido.</div>
+                <div *ngIf="serviceForm.get('nombre')?.errors?.['pattern']">Solo se permiten letras.</div>
+            </div>
+        </div>
+    
+        <div class="mb-4">
+            <label for="descripcion" class="form-label fs-4">Descripción</label>
+            <textarea class="form-control form-control-lg" formControlName="descripcion" placeholder="Introduce una descripción"
+                rows="4" [ngClass]="{'is-invalid': serviceForm.get('descripcion')?.invalid && (serviceForm.get('descripcion')?.touched || serviceForm.get('descripcion')?.dirty)}"></textarea>
+            <div class="text-danger" *ngIf="serviceForm.get('descripcion')?.errors && (serviceForm.get('descripcion')?.touched || serviceForm.get('descripcion')?.dirty)">
+                <div *ngIf="serviceForm.get('descripcion')?.errors?.['required']">La descripción es requerida.</div>
+            </div>
+        </div>
+    
+        <div class="mb-4">
+            <label for="precio" class="form-label fs-4">Precio</label>
+            <input type="text" class="form-control form-control-lg" formControlName="precio" placeholder="Introduce el precio"
+                (keypress)="onlyNumbers($event)" [ngClass]="{'is-invalid': serviceForm.get('precio')?.invalid && (serviceForm.get('precio')?.touched || serviceForm.get('precio')?.dirty)}">
+            <div class="text-danger" *ngIf="serviceForm.get('precio')?.invalid && (serviceForm.get('precio')?.touched || serviceForm.get('precio')?.dirty)">
+                <div *ngIf="serviceForm.get('precio')?.errors?.['required']">El precio es requerido.</div>
+                <div *ngIf="serviceForm.get('precio')?.errors?.['pattern']">Solo se permiten números.</div>
+            </div>
+        </div>
+    
+        <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-secondary btn-lg" (click)="goBack()" [disabled]="createUserButton">Volver</button>
+            <button type="submit" class="btn btn-primary btn-lg" [disabled]="serviceForm.invalid || createUserButton">Guardar</button>
+        </div>
+    </form>    
+</div>

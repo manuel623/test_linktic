@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\sistema_reservas_backend.props" />
+</Project>

@@ -1,0 +1,50 @@
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card p-4 shadow-lg" style="width: 24rem;">
+      <h2 class="text-center mb-4">Iniciar Sesión</h2>
+  
+      <form [formGroup]="loginForm" (ngSubmit)="verificationLogin()">
+        <div class="mb-3">
+          <label for="email" class="form-label">Correo Electrónico</label>
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="fa-solid fa-envelope"></i>
+            </span>
+            <input type="email" class="form-control" formControlName="email" placeholder="Introduce tu email"
+              [ngClass]="{'is-invalid': loginForm.get('email')?.invalid && (loginForm.get('email')?.touched || loginForm.get('email')?.dirty)}">
+          </div>
+          <div class="text-red"
+            *ngIf="loginForm.get('email')?.errors && (loginForm.get('email')?.touched || loginForm.get('email')?.dirty)">
+            <div *ngIf="loginForm.get('email')?.errors?.['required']">
+              El correo electrónico es requerido.
+            </div>
+            <div *ngIf="loginForm.get('email')?.errors?.['email']">
+              El formato del correo no es válido.
+            </div>
+          </div>
+        </div>
+  
+        <div class="mb-3">
+          <label for="password" class="form-label">Contraseña</label>
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="fa-solid fa-lock"></i>
+            </span>
+            <input type="password" class="form-control" formControlName="password" placeholder="Introduce tu password"
+              [ngClass]="{'is-invalid': loginForm.get('password')?.invalid && (loginForm.get('password')?.touched || loginForm.get('password')?.dirty)}">
+          </div>
+          <div class="text-red"
+            *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.touched || loginForm.get('password')?.dirty)">
+            <div *ngIf="loginForm.get('password')?.errors?.['required']">
+              La password es requerida.
+            </div>
+          </div>
+        </div>
+  
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid || activeButton">Iniciar
+            Sesión</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

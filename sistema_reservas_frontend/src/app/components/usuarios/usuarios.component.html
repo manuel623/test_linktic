@@ -1,0 +1,117 @@
+<app-navbar></app-navbar>
+<div class="container my-4">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h3>Gestión de Usuarios</h3>
+            <p>Crea y gestiona la administración de los usuarios.</p>
+            <button *ngIf="!viewForm" class="btn btn-outline-primary mx-2" (click)="viewFormCreate()">
+                <i class="fa-solid fa-plus" style="color: #74C0FC; padding-right: 3px;"></i>Crear Usuario</button>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5" *ngIf="!viewForm">
+    <h3 class="text-center">Usuarios</h3>
+    <div class="justify-content-center d-flex mt-5" *ngIf="loadingTable">
+        <i class="fa-solid fa-spinner fa-spin fa-2xl"></i>
+    </div>
+    <table class="table table-striped text-center" *ngIf="!loadingTable">
+        <thead>
+            <tr>
+                <th class="align-middle">Nombre</th>
+                <th class="align-middle">Correo electrónico</th>
+                <th class="align-middle">Fecha y Hora de creación</th>
+                <th class="align-middle">Estado</th>
+                <th class="align-middle">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="dataUser.length <= 0">
+                <td colspan="5" class="text-center">
+                    No hay datos para mostrar
+                </td>
+            </tr>
+            <tr *ngFor="let item of dataUser">
+                <td class="align-middle">{{item.nombre}}</td>
+                <td class="align-middle">{{item.email}}</td>
+                <td class="align-middle">{{ item.fechaCreacion | date:'dd \'de\' MMMM \'del\' yyyy' }}</td>
+                <td class="align-middle">
+                    <span class="text-status">Activo<i class="fa-solid fa-circle fa-2xs ms-2 mt-3"
+                            style="color: #63E6BE;"></i></span>
+                </td>
+                <td class="align-middle">
+                    <button class="btn btn-sm btn-outline-warning p-2 m-2" (click)="editViewUser(item.id)">
+                        <i class="fa-solid fa-pen-to-square" style="color: #FFD43B; padding-right: 3px;"></i>Editar
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger p-2 m-2" (click)="deleteUser(item.id)">
+                        <i class="fa-solid fa-delete-left fa-flip-vertical" style="color: #ff1100; padding-right: 3px;"></i>Eliminar
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="viewForm" class="d-flex justify-content-center align-items-center">
+    <form [formGroup]="userForm" (ngSubmit)="submitForm()" class="p-4 border rounded bg-light w-100"
+        style="max-width: 90%; margin: 0 auto;" [ngStyle]="{'max-width': '90%', 'width': '50%'}">
+
+        <div class="mb-4">
+            <label for="nombre" class="form-label fs-4">Nombre</label>
+            <input type="text" class="form-control form-control-lg" formControlName="nombre"
+                placeholder="Introduce tu nombre"
+                [ngClass]="{'is-invalid': userForm.get('nombre')?.invalid && (userForm.get('nombre')?.touched || userForm.get('nombre')?.dirty)}">
+            <div class="text-danger"
+                *ngIf="userForm.get('nombre')?.errors && (userForm.get('nombre')?.touched || userForm.get('nombre')?.dirty)">
+                <div *ngIf="userForm.get('nombre')?.errors?.['required']">
+                    El nombre es requerido.
+                </div>
+                <div *ngIf="userForm.get('nombre')?.errors?.['pattern']">
+                    Solo se permiten letras.
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label for="email" class="form-label fs-4">Correo Electrónico</label>
+            <input type="email" class="form-control form-control-lg" formControlName="email"
+                placeholder="Introduce tu email"
+                [ngClass]="{'is-invalid': userForm.get('email')?.invalid && (userForm.get('email')?.touched || userForm.get('email')?.dirty)}">
+            <div class="text-danger"
+                *ngIf="userForm.get('email')?.errors && (userForm.get('email')?.touched || userForm.get('email')?.dirty)">
+                <div *ngIf="userForm.get('email')?.errors?.['required']">
+                    El correo electrónico es requerido.
+                </div>
+                <div *ngIf="userForm.get('email')?.errors?.['email']">
+                    El formato del correo no es válido.
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label for="password" class="form-label fs-4">Contraseña</label>
+            <input type="password" class="form-control form-control-lg" formControlName="password"
+                placeholder="Introduce tu password"
+                [ngClass]="{'is-invalid': userForm.get('password')?.invalid && (userForm.get('password')?.touched || userForm.get('password')?.dirty)}">
+            <div class="text-danger"
+                *ngIf="userForm.get('password')?.invalid && (userForm.get('password')?.touched || userForm.get('password')?.dirty)">
+                <div *ngIf="userForm.get('password')?.errors?.['required']">
+                    La password es requerida.
+                </div>
+                <div *ngIf="userForm.get('password')?.errors?.['minlength']">
+                    La password debe tener al menos 7 caracteres.
+                </div>
+                <div *ngIf="userForm.get('password')?.errors?.['maxlength']">
+                    La password no puede superar los 20 caracteres.
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-secondary btn-lg" (click)="goBack()"
+                [disabled]="createUserButton">Volver</button>
+            <button type="submit" class="btn btn-primary btn-lg"
+                [disabled]="userForm.invalid || createUserButton">Guardar</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  backend:
+    build: 
+      context: ./sistema_reservas_backend
+    ports:
+      - "5054:80" 
+    networks:
+      - linktic-network
+    depends_on:
+      - db
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+
+  frontend:
+    build:
+      context: ./sistema_reservas_frontend
+    ports:
+      - "4200:80" 
+    networks:
+      - linktic-network
+    depends_on:
+      - backend
+
+  db:
+    image: mysql:8.4.3
+    restart: always
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes" 
+      MYSQL_DATABASE: sistema_reservas
+      MYSQL_PASSWORD: "" 
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - linktic-network
+
+networks:
+  linktic-network:
+    driver: bridge
+
+volumes:
+  db_data:

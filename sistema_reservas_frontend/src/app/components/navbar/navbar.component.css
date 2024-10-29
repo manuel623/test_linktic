@@ -1,0 +1,9 @@
+.navbar-dark .navbar-nav .nav-link {
+    color: white;
+}
+    
+.navbar-dark .navbar-nav .nav-link:hover {
+    background-color: #495057;
+    border-radius: 5px;
+}
+    
