@@ -76,4 +76,6 @@ Si prefieres usar Docker para levantar el proyecto, asegúrate de tener Docker i
 
 1. Ten en cuenta que cada componente tiene validación de guardianes, por ende si no inicias sesión no podras acceder a ellos
 2. Cada consumo de endpoint tiene autenticación Bearer Token, el cual se genera al iniciar sesión 
-
+3. Para poder iniciar sesion ingresa la siguiente información (En caso de importar manualmente la Base de Datos)
+- Correo: Admin@example.com
+- Contraseña: Admin
